@@ -1,0 +1,181 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.33.0.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: 24d96cd98f2a2fe66ef2e94b809ba7414dcce58a20a4de5052895258a77c2268
+
+name:           optix-lang
+version:        0.1.0.0
+description:    Please see the README on GitHub at <https://github.com/Skyb0rg007/optix-lang#readme>
+homepage:       https://github.com/Skyb0rg007/optix-lang#readme
+bug-reports:    https://github.com/Skyb0rg007/optix-lang/issues
+author:         Skye Soss
+maintainer:     skyler.soss@gmail.com
+copyright:      2019 Skye Soss
+license:        BSD3
+license-file:   LICENSE
+build-type:     Simple
+extra-source-files:
+    README.md
+    ChangeLog.md
+
+source-repository head
+  type: git
+  location: https://github.com/Skyb0rg007/optix-lang
+
+library
+  exposed-modules:
+      Language.Optix.Core.Eval
+      Language.Optix.Core.Syntax
+      Language.Optix.Frontend.Lower
+      Language.Optix.Frontend.Parser
+      Language.Optix.Frontend.Parser.Lexer
+      Language.Optix.Frontend.Parser.Monad
+      Language.Optix.Frontend.Parser.Parser
+      Language.Optix.Frontend.Parser.Token
+      Language.Optix.Frontend.Syntax
+      Language.Optix.Typecheck
+      Language.Optix.Typecheck.Core
+      Language.Optix.Typecheck.Reachability
+      Language.Optix.Utils.Fresh
+      Language.Optix.Utils.Located
+      Language.Optix.Utils.Misc
+      Language.Optix.Utils.Orphans
+      Language.Optix.Utils.PrecParse
+      Language.Optix.Utils.Pretty
+      System.DlOpen
+      System.DlOpen.Posix
+      System.DlOpen.Windows
+  other-modules:
+      Paths_optix_lang
+  hs-source-dirs:
+      src
+  ghc-options: -Wno-missing-home-modules
+  build-tools:
+      alex
+    , happy
+  build-depends:
+      array
+    , base >=4.7 && <5
+    , binary
+    , bound
+    , bytes
+    , bytestring
+    , containers
+    , deepseq
+    , deque
+    , deriving-compat
+    , hashable
+    , libffi
+    , megaparsec
+    , mmorph
+    , mtl
+    , ordered-containers
+    , parsec
+    , parser-combinators
+    , prettyprinter
+    , prettyprinter-ansi-terminal
+    , s-cargot
+    , semigroupoids
+    , text
+    , transformers
+    , unordered-containers
+    , vector
+  if os(windows)
+    build-depends:
+        Win32
+  else
+    build-depends:
+        unix
+  default-language: Haskell2010
+
+executable optix
+  main-is: Main.hs
+  other-modules:
+      Paths_optix_lang
+  hs-source-dirs:
+      app
+  ghc-options: -Wno-missing-home-modules -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      array
+    , base >=4.7 && <5
+    , binary
+    , bound
+    , bytes
+    , bytestring
+    , containers
+    , deepseq
+    , deque
+    , deriving-compat
+    , hashable
+    , libffi
+    , megaparsec
+    , mmorph
+    , mtl
+    , optix-lang
+    , ordered-containers
+    , parsec
+    , parser-combinators
+    , prettyprinter
+    , prettyprinter-ansi-terminal
+    , s-cargot
+    , semigroupoids
+    , text
+    , transformers
+    , unordered-containers
+    , vector
+  if os(windows)
+    build-depends:
+        Win32
+  else
+    build-depends:
+        unix
+  default-language: Haskell2010
+
+test-suite optix-lang-test
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
+  other-modules:
+      Paths_optix_lang
+  hs-source-dirs:
+      test
+  ghc-options: -Wno-missing-home-modules -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      QuickCheck
+    , array
+    , base >=4.7 && <5
+    , binary
+    , bound
+    , bytes
+    , bytestring
+    , containers
+    , deepseq
+    , deque
+    , deriving-compat
+    , hashable
+    , hspec
+    , libffi
+    , megaparsec
+    , mmorph
+    , mtl
+    , optix-lang
+    , ordered-containers
+    , parsec
+    , parser-combinators
+    , prettyprinter
+    , prettyprinter-ansi-terminal
+    , s-cargot
+    , semigroupoids
+    , text
+    , transformers
+    , unordered-containers
+    , vector
+  if os(windows)
+    build-depends:
+        Win32
+  else
+    build-depends:
+        unix
+  default-language: Haskell2010

@@ -1,0 +1,48 @@
+
+(* vim: set ft=sml: *)
+
+(* SML:
+infix  7 * / mod div
+infix  6 + - ^
+infixr 5 :: @
+infix  4 = <> > >= < <=
+infix  3 := o
+infix  0 before
+*)
+
+(* Haskell:
+infixr 9 .
+infixr 8 ^ ^^ **
+infixl 7 * / mod div quot rem
+infixl 6 + -
+infixr 5 :
+infix  4 == /= < <= > >=
+infixr 3 &&
+infixr 2 ||
+infixl 1 >> >>=
+infixr 1 =<<
+infixr 0 $ $! seq
+*)
+
+infixr 8 **
+infixl 7 * mod div
+infixl 6 + -
+infixr 5 ::
+infix  4 = <> < <= > >=
+infixr 3 :=
+infixl 0 before
+
+val op **  = _prim "primIntPow"  : int -> int -> int;
+val op *   = _prim "primIntMult" : int -> int -> int;
+val op mod = _prim "primIntMod"  : int -> int -> int;
+val op div = _prim "primIntDiv"  : int -> int -> int;
+
+(* val op == = _prim "primIntEq" : int -> int -> bool; *)
+(* val op <> = _prim "primIntNeq" : int -> int -> bool; *)
+
+(* val op := = _prim "primRefSet" : ('a, top) ref -> 'a -> unit; *)
+(* val !     = _prim "primRefGet" : (bot, 'a) ref -> 'a *)
+(* val ref   = _prim "primRefNew" : 'a -> ('a, 'a) ref; *)
+
+fun x before _ = x
+

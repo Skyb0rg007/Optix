@@ -1,0 +1,18 @@
+
+(* vim: set ft=sml: *)
+
+infixr 8 **
+infixl 7 * mod div
+infixl 6 + -
+infixr 5 ::
+infix  4 = <> < <= > >=
+infixr 3 :=
+infixl 0 before
+
+val op before = fn a => fn b => a
+
+(* val op + = _prim "primIntAdd" : int -> int -> int; *)
+(* val print = _prim "primIntPrint" : int -> unit; *)
+
+
+

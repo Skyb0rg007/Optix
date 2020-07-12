@@ -1,0 +1,90 @@
+name:                optix-lang
+version:             0.1.0.0
+github:              "Skyb0rg007/optix-lang"
+license:             BSD3
+author:              "Skye Soss"
+maintainer:          "skyler.soss@gmail.com"
+copyright:           "2019 Skye Soss"
+
+extra-source-files:
+- README.md
+- ChangeLog.md
+
+# Metadata used when publishing your package
+# synopsis:            Short description of your package
+# category:            Web
+
+# To avoid duplicated efforts in documentation and dealing with the
+# complications of embedding Haddock markup inside cabal files, it is
+# common to point users to the README.md file.
+description:         Please see the README on GitHub at <https://github.com/Skyb0rg007/optix-lang#readme>
+
+dependencies:
+- base >= 4.7 && < 5
+- array
+- binary
+- bound
+- bytestring
+- containers
+- deepseq
+- hashable
+- libffi
+- megaparsec
+- mmorph
+- mtl
+- parser-combinators
+- prettyprinter
+- prettyprinter-ansi-terminal
+- text
+- transformers
+- unordered-containers
+- vector
+- deriving-compat
+- bytes
+- unordered-containers
+- semigroupoids
+- deque
+- s-cargot
+- parsec
+- ordered-containers
+
+ghc-options:
+  - -Wno-missing-home-modules
+
+when:
+- condition: os(windows)
+  then: 
+    dependencies: Win32
+  else:
+    dependencies: unix
+
+library:
+  source-dirs: src
+  build-tools:
+    - alex
+    - happy
+
+executables:
+  optix:
+    main:                Main.hs
+    source-dirs:         app
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - optix-lang
+
+tests:
+  optix-lang-test:
+    main:                Spec.hs
+    source-dirs:         test
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - optix-lang
+    - hspec
+    - QuickCheck
+
