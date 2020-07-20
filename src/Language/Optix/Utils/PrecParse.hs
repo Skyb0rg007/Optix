@@ -37,6 +37,7 @@ data PrecParse m a = PrecParse
     , _precParseApplyInfix :: a -> a -> a -> m a           -- ^ How to apply an infix operator to arguments
     , _precParseFixval     :: a -> m Fixval                -- ^ The precedence + infix status of a token
     , _precParseError      :: forall b. PrecError a -> m b -- ^ Process an error
+    -- , _precParseWarn       :: PrecError a -> m ()          -- ^ Process a warning
     }
 
 data PrecStack a

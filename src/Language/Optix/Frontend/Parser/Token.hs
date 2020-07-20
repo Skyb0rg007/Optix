@@ -6,8 +6,8 @@ module Language.Optix.Frontend.Parser.Token
     , Token
     ) where
 
-import           Data.Int  (Int32)
-import           Data.Text (Text)
+import           Data.Scientific (Scientific)
+import           Data.Text       (Text)
 
 import           Language.Optix.Utils.Located (Located)
 
@@ -30,6 +30,8 @@ data Token_
     | TokAmpersand
 
     | TokAnd
+    | TokAs
+    | TokAndAlso
     | TokDo
     | TokDot
     | TokElse
@@ -45,6 +47,7 @@ data Token_
     | TokLet
     | TokNonfix
     | TokOp
+    | TokOrElse
     | TokPrim
     | TokThen
     | TokTrue
@@ -54,7 +57,8 @@ data Token_
     | TokTyVarId !Text
     | TokSymId !Text
 
-    | TokInt !Int32
+    | TokInt !Integer
+    | TokReal !Scientific
     | TokString !Text
     | TokChar !Char
     deriving (Show, Eq, Ord, Read)

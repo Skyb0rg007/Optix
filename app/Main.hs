@@ -22,41 +22,41 @@ import           System.IO
 
 -- import qualified Language.Optix.Core.SExp              as Core
 import qualified Language.Optix.Core.Syntax            as Core
-import qualified Language.Optix.Frontend.Lower         as Frontend
+-- import qualified Language.Optix.Frontend.Lower         as Frontend
 import qualified Language.Optix.Frontend.Parser.Lexer  as Frontend
 import qualified Language.Optix.Frontend.Parser.Monad  as Frontend
-import qualified Language.Optix.Frontend.Parser.Parser as Frontend
+import qualified Language.Optix.Frontend.Parser.Parser2 as Frontend
 import qualified Language.Optix.Frontend.Parser.Token  as Frontend
-import qualified Language.Optix.Frontend.Syntax        as Frontend
-import qualified Language.Optix.Typecheck              as Typecheck
+import qualified Language.Optix.Frontend.AST        as Frontend
+-- import qualified Language.Optix.Typecheck              as Typecheck
 
 import           Language.Optix.Utils.Located
 import           Language.Optix.Utils.Pretty
 import qualified Language.Optix.Utils.PrecParse as PrecParse
 
-fixityEnv :: HashMap Text PrecParse.Fixval
-fixityEnv = HashMap.fromList
-  [ ("**", PrecParse.Infix 17 16)
+-- fixityEnv :: HashMap Text PrecParse.Fixval
+-- fixityEnv = HashMap.fromList
+  -- [ ("**", PrecParse.Infix 17 16)
 
-  , ("*", PrecParse.Infix 14 15)
-  , ("mod", PrecParse.Infix 14 15)
-  , ("div", PrecParse.Infix 14 15)
+  -- , ("*", PrecParse.Infix 14 15)
+  -- , ("mod", PrecParse.Infix 14 15)
+  -- , ("div", PrecParse.Infix 14 15)
 
-  , ("+", PrecParse.Infix 12 13)
-  , ("-", PrecParse.Infix 12 13)
+  -- , ("+", PrecParse.Infix 12 13)
+  -- , ("-", PrecParse.Infix 12 13)
 
-  , ("::", PrecParse.Infix 11 10)
+  -- , ("::", PrecParse.Infix 11 10)
 
-  , ("=", PrecParse.Infix 8 8)
-  , ("<", PrecParse.Infix 8 8)
-  , (">", PrecParse.Infix 8 8)
-  , ("<=", PrecParse.Infix 8 8)
-  , (">=", PrecParse.Infix 8 8)
+  -- , ("=", PrecParse.Infix 8 8)
+  -- , ("<", PrecParse.Infix 8 8)
+  -- , (">", PrecParse.Infix 8 8)
+  -- , ("<=", PrecParse.Infix 8 8)
+  -- , (">=", PrecParse.Infix 8 8)
 
-  , (":=", PrecParse.Infix 7 6)
+  -- , (":=", PrecParse.Infix 7 6)
 
-  , ("before", PrecParse.Infix 0 1)
-  ]
+  -- , ("before", PrecParse.Infix 0 1)
+  -- ]
 
 frontendStyle :: Frontend.Style -> AnsiStyle
 frontendStyle = \case
@@ -65,7 +65,7 @@ frontendStyle = \case
     Frontend.StyleKeyword -> color Green
     Frontend.StyleTyVar -> color Blue
     Frontend.StyleVar -> color Blue
-    Frontend.StyleType -> colorDull Green
+    Frontend.StyleType -> colorDull Yellow
     Frontend.StyleLabel -> colorDull Blue
     Frontend.StyleBool -> colorDull Red
 
@@ -76,7 +76,7 @@ coreStyle = \case
     Core.StyleKeyword -> color Green
     Core.StyleTyVar -> color Blue
     Core.StyleVar -> color Blue
-    Core.StyleType -> colorDull Green
+    Core.StyleType -> colorDull Yellow
     Core.StyleLabel -> colorDull Blue
     Core.StyleBool -> colorDull Red
 
@@ -90,14 +90,14 @@ main = do
           -- print $ prettyPrec 0 prog
           putDoc (frontendStyle <$> prettyPrec 0 prog)
           putStrLn ""
-          case Frontend.lower prog of
-            Left err -> Text.IO.putStrLn $ "Error: " <> err
-            Right prog' -> do
-                putStrLn "\nCore: \n------------------------------\n\n"
-                -- print $ prettyPrec 0 prog'
-                putDoc (coreStyle <$> prettyPrec 0 prog')
-                putStrLn ""
-                case Typecheck.typecheck (Core._programBody prog') of
-                  Left err -> Text.IO.putStrLn $ "Error: " <> err
-                  Right _ -> putStrLn "Okay"
+          -- case Frontend.lower prog of
+            -- Left err -> Text.IO.putStrLn $ "Error: " <> err
+            -- Right prog' -> do
+                -- putStrLn "\nCore: \n------------------------------\n\n"
+                -- -- print $ prettyPrec 0 prog'
+                -- putDoc (coreStyle <$> prettyPrec 0 prog')
+                -- putStrLn ""
+                -- case Typecheck.typecheck (Core._programBody prog') of
+                  -- Left err -> Text.IO.putStrLn $ "Error: " <> err
+                  -- Right _ -> putStrLn "Okay"
 

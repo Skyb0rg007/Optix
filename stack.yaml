@@ -4,5 +4,5 @@ resolver: lts-16.4
 packages:
 - .
 
-extra-deps:
-- s-cargot-0.1.4.0@sha256:61ea1833fbb4c80d93577144870e449d2007d311c34d74252850bb48aa8c31fb,3525
+extra-deps: []
+

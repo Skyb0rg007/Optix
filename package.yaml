@@ -22,33 +22,40 @@ description:         Please see the README on GitHub at <https://github.com/Skyb
 dependencies:
 - base >= 4.7 && < 5
 - array
+- bifunctors
 - binary
 - bound
+- bytes
 - bytestring
 - containers
 - deepseq
+- deque
+- deriving-compat
 - hashable
 - libffi
 - megaparsec
 - mmorph
+- monad-control
+- monad-memo
 - mtl
+- ordered-containers
+- parsec
 - parser-combinators
 - prettyprinter
 - prettyprinter-ansi-terminal
+- scientific
+- semigroupoids
 - text
 - transformers
+- transformers-base
 - unordered-containers
 - vector
-- deriving-compat
-- bytes
-- unordered-containers
-- semigroupoids
-- deque
-- s-cargot
-- parsec
-- ordered-containers
+- vty
+- writer-cps-mtl
 
 ghc-options:
+  # TODO: fix by writing modules by hand
+  # When you do, fix System.DlOpen.{Posix,Windows} too
   - -Wno-missing-home-modules
 
 when:

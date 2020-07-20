@@ -10,7 +10,6 @@ module Language.Optix.Frontend.Parser.Parser
     ) where
 
 import           Control.Monad.Error (throwError)
-import           Data.Int            (Int32)
 import           Data.List.NonEmpty  (NonEmpty ((:|)))
 import qualified Data.List.NonEmpty  as NonEmpty
 import           Data.Text           (Text)
@@ -251,7 +250,7 @@ get_exp :: { Exp }
 aexp :: { Exp }
   : vid    { At (spanOf $1) $ ExpVar (valOf $1) False }
   | OP vid { At ($1 <> spanOf $2) $ ExpVar (valOf $2) True }
-  | INT { At (spanOf $1) $ ExpInt (valOf $1) }
+  | INT { At (spanOf $1) $ ExpInt (fromIntegral $ valOf $1) }
   | TRUE { At $1 $ ExpBool True }
   | FALSE { At $1 $ ExpBool False }
   | "{" elabels "}" { At ($1 <> $3) $ ExpRecord $2 }
@@ -280,7 +279,7 @@ pattern AtTokSymId p <- (atTokSymId -> Just p)
 atTokSymId (At s (TokSymId x)) = Just (At s x)
 atTokSymId _ = Nothing
 
-pattern AtTokInt :: Located Int32 -> Token
+pattern AtTokInt :: Located Integer -> Token
 pattern AtTokInt p <- (atTokInt -> Just p)
 atTokInt (At s (TokInt x)) = Just (At s x)
 atTokInt _ = Nothing

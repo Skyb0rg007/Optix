@@ -11,8 +11,24 @@ infixl 0 before
 
 val op before = fn a => fn b => a
 
-(* val op + = _prim "primIntAdd" : int -> int -> int; *)
+(* type unit = {} *)
+
+val op + = _prim "primIntAdd" : int -> int -> int;
+val ! = _prim "primRefGet" : (bot, 'a) ref -> 'a;
+val op := = _prim "primRefSet" : ('a, top) ref -> 'a -> unit;
 (* val print = _prim "primIntPrint" : int -> unit; *)
 
+fun foo x : 'a | 'b -> 'c = x
+  | foo y = y
 
+(* fun foo x = x *)
+
+(* fun ifte x = *)
+  (* if x.cond () *)
+  (* then runTrue x *)
+  (* else runFalse x *)
+(* and runTrue x = x.t () *)
+(* and runFalse x = x.f () *)
+
+(* do ifte { } *)
 

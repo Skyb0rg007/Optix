@@ -12,6 +12,7 @@ import           Data.Text (Text)
 import           Control.Monad.State.Strict
 import           Control.Monad.Except
 import           Data.Functor.Identity
+import           Control.Monad (replicateM)
 
 import           Language.Optix.Typecheck.Core
 import           Language.Optix.Typecheck.Reachability
@@ -73,7 +74,16 @@ typecheck e =
                 -- Γ ⊢ let x = e₁ in e₂ : τ₂
                 t1 <- tc e1
                 tc (Bound.Name.instantiate1Name (ExpVar t1) e2)
-            ExpLetRec {} -> error "letrec not implemented"
+            ExpLetRec binds body -> do
+                -- Γ, x₁ : α₁, ..., xn : αn ⊢ e₁ : τ₁, en : τn, e : τ
+                -- τ₁ <: α₁, ..., τn <: αn
+                -- -------------
+                -- Γ ⊢ letrec x₁ = e₁; ...; xn = en in e : τ
+                (newVals, newUses) <- unzip <$> replicateM (length binds) newVar
+                let binds' = Bound.Name.instantiateName (\i -> ExpVar $ newVals !! i) <$> binds
+                bindTypes <- traverse tc binds'
+                forM_ (zip newUses bindTypes) $ \(u, t) -> t `flow` u
+                tc (Bound.Name.instantiateName (\i -> ExpVar $ newVals !! i) body)
             ExpRecord r -> do
                 r' <- traverse tc r
                 newVal $ VRecord r'

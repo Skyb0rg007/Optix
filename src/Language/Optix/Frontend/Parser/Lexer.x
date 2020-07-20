@@ -19,7 +19,7 @@ import           Data.ByteString.Internal   (c2w)
 import qualified Data.ByteString.Lazy       as Lazy (ByteString)
 import qualified Data.ByteString.Lazy       as Lazy.ByteString
 import qualified Data.ByteString.Lazy.Char8 as Lazy.ByteString.Char8
-import           Data.Int                   (Int32, Int64)
+import           Data.Int                   (Int64)
 import           Data.Text                  (Text)
 import qualified Data.Text                  as Text
 import qualified Data.Text.Encoding         as Text.Encoding (decodeUtf8)
@@ -75,25 +75,28 @@ tokens :-
     <0> "&"      { pureTok TokAmpersand }
 
     -- Keywords
-    <0> and      { pureTok TokAnd    }
-    <0> do       { pureTok TokDo     }
-    <0> else     { pureTok TokElse   }
-    <0> end      { pureTok TokEnd    }
-    <0> false    { pureTok TokFalse  }
-    <0> fn       { pureTok TokFn     }
-    <0> fun      { pureTok TokFun    }
-    <0> if       { pureTok TokIf     }
-    <0> infixl   { pureTok TokInfixl }
-    <0> infix    { pureTok TokInfix  }
-    <0> infixr   { pureTok TokInfixr }
-    <0> in       { pureTok TokIn     }
-    <0> let      { pureTok TokLet    }
-    <0> nonfix   { pureTok TokNonfix }
-    <0> op       { pureTok TokOp     }
-    <0> then     { pureTok TokThen   }
-    <0> true     { pureTok TokTrue   }
-    <0> val      { pureTok TokVal    }
-    <0> _prim    { pureTok TokPrim   }
+    <0> and      { pureTok TokAnd     }
+    <0> as       { pureTok TokAs      }
+    <0> andalso  { pureTok TokAndAlso }
+    <0> do       { pureTok TokDo      }
+    <0> else     { pureTok TokElse    }
+    <0> end      { pureTok TokEnd     }
+    <0> false    { pureTok TokFalse   }
+    <0> fn       { pureTok TokFn      }
+    <0> fun      { pureTok TokFun     }
+    <0> if       { pureTok TokIf      }
+    <0> infixl   { pureTok TokInfixl  }
+    <0> infix    { pureTok TokInfix   }
+    <0> infixr   { pureTok TokInfixr  }
+    <0> in       { pureTok TokIn      }
+    <0> let      { pureTok TokLet     }
+    <0> nonfix   { pureTok TokNonfix  }
+    <0> op       { pureTok TokOp      }
+    <0> orelse   { pureTok TokOrElse  }
+    <0> then     { pureTok TokThen    }
+    <0> true     { pureTok TokTrue    }
+    <0> val      { pureTok TokVal     }
+    <0> _prim    { pureTok TokPrim    }
 
     -- Identifiers: alpha-numeric, symbols, type variables
     <0> @alphaNumId { textTok TokId      }
@@ -149,9 +152,9 @@ textTok t span lbs = pure $ At span (t $ lbsToText lbs)
         lbsToText = Text.Encoding.decodeUtf8 . Lazy.ByteString.toStrict
 
 -- | Produce a numeric token, with a given base and string offset
-numTok :: Int32 -> Int64 -> (Int32 -> Token_) -> Span -> Lazy.ByteString -> Parser Token
+numTok :: Integer -> Int64 -> (Integer -> Token_) -> Span -> Lazy.ByteString -> Parser Token
 numTok base offset t span lbs =
-    let f :: Int32 -> Word8 -> Int32
+    let f :: Integer -> Word8 -> Integer
         f acc c
           | c >= c2w '0' && c <= c2w '9' = base * acc + fromIntegral (c - c2w '0')
           | c >= c2w 'a' && c <= c2w 'f' = base * acc + fromIntegral (c - c2w 'a' + 10)

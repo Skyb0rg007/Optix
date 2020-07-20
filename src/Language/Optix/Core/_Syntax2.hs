@@ -11,18 +11,17 @@
 {-# LANGUAGE StandaloneDeriving    #-}
 {-# LANGUAGE TemplateHaskell       #-}
 
-module Language.Optix.Core.Syntax where
+module Language.Optix.Core.Syntax2 where
 
-import qualified Bound
-import qualified Bound.Name
-import qualified Bound.Scope               as Bound
 import           Control.DeepSeq           (NFData)
 import           Control.Monad             (ap)
 import           Data.Binary               (Binary (get, put))
 import           Data.Bytes.Serial         (Serial, Serial1)
 import           Data.Data                 (Data)
-import           Data.Deriving             (deriveEq1, deriveOrd1, deriveRead1, deriveShow1)
-import           Data.Functor.Classes      (compare1, eq1, readsPrec1, showsPrec1)
+import           Data.Deriving             (deriveEq1, deriveOrd1, deriveRead1,
+                                            deriveShow1)
+import           Data.Functor.Classes      (compare1, eq1, readsPrec1,
+                                            showsPrec1)
 import           Data.Hashable             (Hashable)
 import           Data.Hashable.Lifted      (Hashable1)
 import           Data.HashMap.Strict       (HashMap)
@@ -41,18 +40,16 @@ import           Language.Optix.Utils.Located
 import           Language.Optix.Utils.Pretty
 import           Language.Optix.Utils.Fresh
 import           Language.Optix.Utils.Orphans ()
+import           Language.Optix.Utils.Bound
 
 -- * Definitions
-
+{- 
 newtype Program = Program
     { _programBody :: Exp
     }
     deriving (Generic, Data, Typeable, NFData, Binary, Hashable)
 
-type ExpScope b a = Bound.Scope (Bound.Name.Name Text b) Exp_ a
-
-type Exp = Exp_ Text
-data Exp_ a
+data Exp b a
     = ExpVar !a
     | ExpApp !(Exp_ a) !(Exp_ a)
     | ExpInt !Int32
@@ -260,4 +257,4 @@ instance PrettyPrec (Exp_ Text) Style where
 instance Pretty a => PrettyPrec (Ty_ a) Style where
     prettyPrec d = \case
         _ -> "<type>"
-
+ -}
