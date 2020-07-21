@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 35641c53a70a75ad59d4288e1232eebae7ac069637b992052bc4f6e4d97a087d
+-- hash: a33dcbead04399ed3830ef43609f1cbfffc00ff7bc8f382c2abd23ad9098a4e9
 
 name:           optix-lang
 version:        0.1.0.0
@@ -27,45 +27,24 @@ source-repository head
 
 library
   exposed-modules:
-      Control.Monad.LFresh
-      Control.Monad.Trans.Except.Extras
-      Control.Monad.Trans.LFresh
-      Control.Monad.Trans.Warn
-      Control.Monad.Trans.Writer.CPS.Extras
-      Control.Monad.Warn
-      Data.Text.Prettyprint.Doc.Render.Vty
-      Language.Optix.Core.Eval
+      Language.Optix.Core
       Language.Optix.Core.Syntax
-      Language.Optix.Frontend.AST
-      Language.Optix.Frontend.CoreML
-      Language.Optix.Frontend.Lower
-      Language.Optix.Frontend.Parser
+      Language.Optix.Frontend
       Language.Optix.Frontend.Parser.Lexer
       Language.Optix.Frontend.Parser.Monad
       Language.Optix.Frontend.Parser.Parser
-      Language.Optix.Frontend.Parser.Parser2
       Language.Optix.Frontend.Parser.Token
       Language.Optix.Frontend.Syntax
-      Language.Optix.Typecheck
-      Language.Optix.Typecheck.Core
-      Language.Optix.Typecheck.Reachability
-      Language.Optix.Utils.Error
-      Language.Optix.Utils.Fresh
-      Language.Optix.Utils.Located
-      Language.Optix.Utils.Located2
-      Language.Optix.Utils.Misc
-      Language.Optix.Utils.Orphans
-      Language.Optix.Utils.PrecParse
-      Language.Optix.Utils.Pretty
-      Language.Optix.Utils.Pretty2
-      System.DlOpen
-      System.DlOpen.Posix
-      System.DlOpen.Windows
+      Language.Optix.Util.Error
+      Language.Optix.Util.Located
+      Language.Optix.Util.PrecParse
+      Language.Optix.Util.Pretty
   other-modules:
       Paths_optix_lang
   hs-source-dirs:
       src
-  ghc-options: -Wno-missing-home-modules
+  default-extensions: BangPatterns BinaryLiterals ConstraintKinds DataKinds DefaultSignatures DeriveAnyClass DeriveDataTypeable DeriveFoldable DeriveFunctor DeriveGeneric DeriveTraversable DerivingStrategies EmptyDataDecls ExistentialQuantification FlexibleContexts FlexibleInstances FunctionalDependencies GADTs GeneralizedNewtypeDeriving InstanceSigs KindSignatures LambdaCase MultiParamTypeClasses MultiWayIf OverloadedStrings PackageImports PolyKinds RankNTypes ScopedTypeVariables StandaloneDeriving TupleSections TypeFamilies TypeOperators TypeSynonymInstances ViewPatterns
+  ghc-options: -Wno-missing-home-modules -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wpartial-fields -Wredundant-constraints
   build-tools:
       alex
     , happy
@@ -82,6 +61,7 @@ library
     , deque
     , deriving-compat
     , hashable
+    , lens
     , libffi
     , megaparsec
     , mmorph
@@ -116,7 +96,8 @@ executable optix
       Paths_optix_lang
   hs-source-dirs:
       app
-  ghc-options: -Wno-missing-home-modules -threaded -rtsopts -with-rtsopts=-N
+  default-extensions: BangPatterns BinaryLiterals ConstraintKinds DataKinds DefaultSignatures DeriveAnyClass DeriveDataTypeable DeriveFoldable DeriveFunctor DeriveGeneric DeriveTraversable DerivingStrategies EmptyDataDecls ExistentialQuantification FlexibleContexts FlexibleInstances FunctionalDependencies GADTs GeneralizedNewtypeDeriving InstanceSigs KindSignatures LambdaCase MultiParamTypeClasses MultiWayIf OverloadedStrings PackageImports PolyKinds RankNTypes ScopedTypeVariables StandaloneDeriving TupleSections TypeFamilies TypeOperators TypeSynonymInstances ViewPatterns
+  ghc-options: -Wno-missing-home-modules -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wpartial-fields -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       array
     , base >=4.7 && <5
@@ -130,6 +111,7 @@ executable optix
     , deque
     , deriving-compat
     , hashable
+    , lens
     , libffi
     , megaparsec
     , mmorph
@@ -166,7 +148,8 @@ test-suite optix-lang-test
       Paths_optix_lang
   hs-source-dirs:
       test
-  ghc-options: -Wno-missing-home-modules -threaded -rtsopts -with-rtsopts=-N
+  default-extensions: BangPatterns BinaryLiterals ConstraintKinds DataKinds DefaultSignatures DeriveAnyClass DeriveDataTypeable DeriveFoldable DeriveFunctor DeriveGeneric DeriveTraversable DerivingStrategies EmptyDataDecls ExistentialQuantification FlexibleContexts FlexibleInstances FunctionalDependencies GADTs GeneralizedNewtypeDeriving InstanceSigs KindSignatures LambdaCase MultiParamTypeClasses MultiWayIf OverloadedStrings PackageImports PolyKinds RankNTypes ScopedTypeVariables StandaloneDeriving TupleSections TypeFamilies TypeOperators TypeSynonymInstances ViewPatterns
+  ghc-options: -Wno-missing-home-modules -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wpartial-fields -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       QuickCheck
     , array
@@ -182,6 +165,7 @@ test-suite optix-lang-test
     , deriving-compat
     , hashable
     , hspec
+    , lens
     , libffi
     , megaparsec
     , mmorph

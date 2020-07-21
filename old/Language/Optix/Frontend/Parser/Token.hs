@@ -1,15 +1,17 @@
 
+{-# OPTIONS_GHC -Wall #-}
+
 module Language.Optix.Frontend.Parser.Token
     ( Token_ (..)
     , Token
     ) where
 
-import           Data.Scientific             (Scientific)
-import           Data.Text                   (Text)
-import           Language.Optix.Util.Located (Located)
+import           Data.Scientific (Scientific)
+import           Data.Text       (Text)
+
+import           Language.Optix.Utils.Located (Located)
 
 type Token = Located Token_
-
 data Token_
     = TokEOF
 
@@ -59,5 +61,5 @@ data Token_
     | TokReal !Scientific
     | TokString !Text
     | TokChar !Char
-
+    deriving (Show, Eq, Ord, Read)
 

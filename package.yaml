@@ -32,6 +32,7 @@ dependencies:
 - deque
 - deriving-compat
 - hashable
+- lens
 - libffi
 - megaparsec
 - mmorph
@@ -53,10 +54,53 @@ dependencies:
 - vty
 - writer-cps-mtl
 
+default-extensions:
+- BangPatterns
+- BinaryLiterals
+- ConstraintKinds
+- DataKinds
+- DefaultSignatures
+- DeriveAnyClass
+- DeriveDataTypeable
+- DeriveFoldable
+- DeriveFunctor
+- DeriveGeneric
+- DeriveTraversable
+- DerivingStrategies
+- EmptyDataDecls
+- ExistentialQuantification
+- FlexibleContexts
+- FlexibleInstances
+- FunctionalDependencies
+- GADTs
+- GeneralizedNewtypeDeriving
+- InstanceSigs
+- KindSignatures
+- LambdaCase
+- MultiParamTypeClasses
+- MultiWayIf
+- OverloadedStrings
+- PackageImports
+- PolyKinds
+- RankNTypes
+- ScopedTypeVariables
+- StandaloneDeriving
+- TupleSections
+- TypeFamilies
+- TypeOperators
+- TypeSynonymInstances
+- ViewPatterns
+
 ghc-options:
-  # TODO: fix by writing modules by hand
-  # When you do, fix System.DlOpen.{Posix,Windows} too
-  - -Wno-missing-home-modules
+# TODO: fix by writing modules by hand
+# When you do, fix System.DlOpen.{Posix,Windows} too
+- -Wno-missing-home-modules
+- -Wcompat
+- -Widentities
+- -Wincomplete-record-updates
+- -Wincomplete-uni-patterns
+- -Wpartial-fields
+- -Wredundant-constraints
 
 when:
 - condition: os(windows)

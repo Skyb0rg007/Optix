@@ -15,24 +15,24 @@ import qualified Data.Text.IO               as Text.IO
 import           Data.Text.Prettyprint.Doc
 import           Data.Text.Prettyprint.Doc.Render.Terminal
 import qualified Foreign.LibFFI             as FFI
-import           System.DlOpen
+-- import           System.DlOpen
 import           System.Environment
 import           System.Exit
 import           System.IO
 
 -- import qualified Language.Optix.Core.SExp              as Core
-import qualified Language.Optix.Core.Syntax            as Core
+-- import qualified Language.Optix.Core.Syntax            as Core
 -- import qualified Language.Optix.Frontend.Lower         as Frontend
-import qualified Language.Optix.Frontend.Parser.Lexer  as Frontend
-import qualified Language.Optix.Frontend.Parser.Monad  as Frontend
-import qualified Language.Optix.Frontend.Parser.Parser2 as Frontend
-import qualified Language.Optix.Frontend.Parser.Token  as Frontend
-import qualified Language.Optix.Frontend.AST        as Frontend
+-- import qualified Language.Optix.Frontend.Parser.Lexer  as Frontend
+-- import qualified Language.Optix.Frontend.Parser.Monad  as Frontend
+-- import qualified Language.Optix.Frontend.Parser.Parser2 as Frontend
+-- import qualified Language.Optix.Frontend.Parser.Token  as Frontend
+-- import qualified Language.Optix.Frontend.AST        as Frontend
 -- import qualified Language.Optix.Typecheck              as Typecheck
 
-import           Language.Optix.Utils.Located
-import           Language.Optix.Utils.Pretty
-import qualified Language.Optix.Utils.PrecParse as PrecParse
+-- import           Language.Optix.Utils.Located
+-- import           Language.Optix.Utils.Pretty
+-- import qualified Language.Optix.Utils.PrecParse as PrecParse
 
 -- fixityEnv :: HashMap Text PrecParse.Fixval
 -- fixityEnv = HashMap.fromList
@@ -58,28 +58,32 @@ import qualified Language.Optix.Utils.PrecParse as PrecParse
   -- , ("before", PrecParse.Infix 0 1)
   -- ]
 
-frontendStyle :: Frontend.Style -> AnsiStyle
-frontendStyle = \case
-    Frontend.StyleString -> colorDull Red
-    Frontend.StyleInt -> colorDull Red
-    Frontend.StyleKeyword -> color Green
-    Frontend.StyleTyVar -> color Blue
-    Frontend.StyleVar -> color Blue
-    Frontend.StyleType -> colorDull Yellow
-    Frontend.StyleLabel -> colorDull Blue
-    Frontend.StyleBool -> colorDull Red
+-- frontendStyle :: Frontend.Style -> AnsiStyle
+-- frontendStyle = \case
+    -- Frontend.StyleString -> colorDull Red
+    -- Frontend.StyleInt -> colorDull Red
+    -- Frontend.StyleKeyword -> color Green
+    -- Frontend.StyleTyVar -> color Blue
+    -- Frontend.StyleVar -> color Blue
+    -- Frontend.StyleType -> colorDull Yellow
+    -- Frontend.StyleLabel -> colorDull Blue
+    -- Frontend.StyleBool -> colorDull Red
 
-coreStyle :: Core.Style -> AnsiStyle
-coreStyle = \case
-    Core.StyleString -> colorDull Red
-    Core.StyleInt -> colorDull Red
-    Core.StyleKeyword -> color Green
-    Core.StyleTyVar -> color Blue
-    Core.StyleVar -> color Blue
-    Core.StyleType -> colorDull Yellow
-    Core.StyleLabel -> colorDull Blue
-    Core.StyleBool -> colorDull Red
+-- coreStyle :: Core.Style -> AnsiStyle
+-- coreStyle = \case
+    -- Core.StyleString -> colorDull Red
+    -- Core.StyleInt -> colorDull Red
+    -- Core.StyleKeyword -> color Green
+    -- Core.StyleTyVar -> color Blue
+    -- Core.StyleVar -> color Blue
+    -- Core.StyleType -> colorDull Yellow
+    -- Core.StyleLabel -> colorDull Blue
+    -- Core.StyleBool -> colorDull Red
 
+main :: IO ()
+main = putStrLn "main"
+
+{- 
 main :: IO ()
 main = do
     input <- Lazy.ByteString.getContents
@@ -100,4 +104,4 @@ main = do
                 -- case Typecheck.typecheck (Core._programBody prog') of
                   -- Left err -> Text.IO.putStrLn $ "Error: " <> err
                   -- Right _ -> putStrLn "Okay"
-
+ -}
