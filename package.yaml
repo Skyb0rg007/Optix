@@ -11,12 +11,9 @@ extra-source-files:
 - ChangeLog.md
 
 # Metadata used when publishing your package
-# synopsis:            Short description of your package
-# category:            Web
+synopsis:            ML-family language with Algebraic Subtyping
+category:            Compilers/Interpreters
 
-# To avoid duplicated efforts in documentation and dealing with the
-# complications of embedding Haddock markup inside cabal files, it is
-# common to point users to the README.md file.
 description:         Please see the README on GitHub at <https://github.com/Skyb0rg007/optix-lang#readme>
 
 dependencies:
@@ -53,6 +50,7 @@ dependencies:
 - vector
 - vty
 - writer-cps-mtl
+- regex-tdfa
 
 default-extensions:
 - BangPatterns
@@ -80,6 +78,7 @@ default-extensions:
 - MultiParamTypeClasses
 - MultiWayIf
 - OverloadedStrings
+- PatternSynonyms
 - PackageImports
 - PolyKinds
 - RankNTypes
@@ -112,8 +111,8 @@ when:
 library:
   source-dirs: src
   build-tools:
-    - alex
-    - happy
+  - alex
+  - happy
 
 executables:
   optix:

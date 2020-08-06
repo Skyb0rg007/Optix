@@ -1,0 +1,4 @@
+
+
+fun 'a foo (x : 'a list) : 'b list = ([] : 'b list)
+

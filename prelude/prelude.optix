@@ -32,10 +32,10 @@ infix  4 = <> < <= > >=
 infixr 3 :=
 infixl 0 before
 
-val op **  = _prim "primIntPow"  : int -> int -> int;
-val op *   = _prim "primIntMult" : int -> int -> int;
-val op mod = _prim "primIntMod"  : int -> int -> int;
-val op div = _prim "primIntDiv"  : int -> int -> int;
+(* val op **  = _prim "primIntPow"  : int -> int -> int; *)
+(* val op *   = _prim "primIntMult" : int -> int -> int; *)
+(* val op mod = _prim "primIntMod"  : int -> int -> int; *)
+(* val op div = _prim "primIntDiv"  : int -> int -> int; *)
 
 (* val op == = _prim "primIntEq" : int -> int -> bool; *)
 (* val op <> = _prim "primIntNeq" : int -> int -> bool; *)
@@ -45,4 +45,21 @@ val op div = _prim "primIntDiv"  : int -> int -> int;
 (* val ref   = _prim "primRefNew" : 'a -> ('a, 'a) ref; *)
 
 fun x before _ = x
+
+datatype 'a option = SOME of 'a | NONE
+datatype bool = true | false
+
+fun foldl f acc xs =
+  let
+    fun go (acc, []) = acc
+      | go (acc, x::xs) = go (f (x, acc), xs)
+  in
+    go (acc, xs)
+  end
+
+fun foo { * : int -> int -> int as / } = 1 / 2
+
+val bar : int * int = (1, 2)
+
+fun foobar x = x.asdf + x.boo.bar.baz - x.x
 

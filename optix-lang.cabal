@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: a33dcbead04399ed3830ef43609f1cbfffc00ff7bc8f382c2abd23ad9098a4e9
+-- hash: d4c283d8943546abb279c638e1b11dd8e87fdf8c00e4beaeb0ae7c8945e7f892
 
 name:           optix-lang
 version:        0.1.0.0
@@ -27,14 +27,15 @@ source-repository head
 
 library
   exposed-modules:
-      Language.Optix.Core
-      Language.Optix.Core.Syntax
-      Language.Optix.Frontend
+      Control.Monad.Trans.Writer.CPS.Extras
+      Control.Monad.Warn
       Language.Optix.Frontend.Parser.Lexer
       Language.Optix.Frontend.Parser.Monad
       Language.Optix.Frontend.Parser.Parser
       Language.Optix.Frontend.Parser.Token
       Language.Optix.Frontend.Syntax
+      Language.Optix.Typecheck.Scope
+      Language.Optix.Typecheck.TC
       Language.Optix.Util.Error
       Language.Optix.Util.Located
       Language.Optix.Util.PrecParse
@@ -43,7 +44,7 @@ library
       Paths_optix_lang
   hs-source-dirs:
       src
-  default-extensions: BangPatterns BinaryLiterals ConstraintKinds DataKinds DefaultSignatures DeriveAnyClass DeriveDataTypeable DeriveFoldable DeriveFunctor DeriveGeneric DeriveTraversable DerivingStrategies EmptyDataDecls ExistentialQuantification FlexibleContexts FlexibleInstances FunctionalDependencies GADTs GeneralizedNewtypeDeriving InstanceSigs KindSignatures LambdaCase MultiParamTypeClasses MultiWayIf OverloadedStrings PackageImports PolyKinds RankNTypes ScopedTypeVariables StandaloneDeriving TupleSections TypeFamilies TypeOperators TypeSynonymInstances ViewPatterns
+  default-extensions: BangPatterns BinaryLiterals ConstraintKinds DataKinds DefaultSignatures DeriveAnyClass DeriveDataTypeable DeriveFoldable DeriveFunctor DeriveGeneric DeriveTraversable DerivingStrategies EmptyDataDecls ExistentialQuantification FlexibleContexts FlexibleInstances FunctionalDependencies GADTs GeneralizedNewtypeDeriving InstanceSigs KindSignatures LambdaCase MultiParamTypeClasses MultiWayIf OverloadedStrings PatternSynonyms PackageImports PolyKinds RankNTypes ScopedTypeVariables StandaloneDeriving TupleSections TypeFamilies TypeOperators TypeSynonymInstances ViewPatterns
   ghc-options: -Wno-missing-home-modules -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wpartial-fields -Wredundant-constraints
   build-tools:
       alex
@@ -73,6 +74,7 @@ library
     , parser-combinators
     , prettyprinter
     , prettyprinter-ansi-terminal
+    , regex-tdfa
     , scientific
     , semigroupoids
     , text
@@ -96,7 +98,7 @@ executable optix
       Paths_optix_lang
   hs-source-dirs:
       app
-  default-extensions: BangPatterns BinaryLiterals ConstraintKinds DataKinds DefaultSignatures DeriveAnyClass DeriveDataTypeable DeriveFoldable DeriveFunctor DeriveGeneric DeriveTraversable DerivingStrategies EmptyDataDecls ExistentialQuantification FlexibleContexts FlexibleInstances FunctionalDependencies GADTs GeneralizedNewtypeDeriving InstanceSigs KindSignatures LambdaCase MultiParamTypeClasses MultiWayIf OverloadedStrings PackageImports PolyKinds RankNTypes ScopedTypeVariables StandaloneDeriving TupleSections TypeFamilies TypeOperators TypeSynonymInstances ViewPatterns
+  default-extensions: BangPatterns BinaryLiterals ConstraintKinds DataKinds DefaultSignatures DeriveAnyClass DeriveDataTypeable DeriveFoldable DeriveFunctor DeriveGeneric DeriveTraversable DerivingStrategies EmptyDataDecls ExistentialQuantification FlexibleContexts FlexibleInstances FunctionalDependencies GADTs GeneralizedNewtypeDeriving InstanceSigs KindSignatures LambdaCase MultiParamTypeClasses MultiWayIf OverloadedStrings PatternSynonyms PackageImports PolyKinds RankNTypes ScopedTypeVariables StandaloneDeriving TupleSections TypeFamilies TypeOperators TypeSynonymInstances ViewPatterns
   ghc-options: -Wno-missing-home-modules -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wpartial-fields -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       array
@@ -124,6 +126,7 @@ executable optix
     , parser-combinators
     , prettyprinter
     , prettyprinter-ansi-terminal
+    , regex-tdfa
     , scientific
     , semigroupoids
     , text
@@ -148,7 +151,7 @@ test-suite optix-lang-test
       Paths_optix_lang
   hs-source-dirs:
       test
-  default-extensions: BangPatterns BinaryLiterals ConstraintKinds DataKinds DefaultSignatures DeriveAnyClass DeriveDataTypeable DeriveFoldable DeriveFunctor DeriveGeneric DeriveTraversable DerivingStrategies EmptyDataDecls ExistentialQuantification FlexibleContexts FlexibleInstances FunctionalDependencies GADTs GeneralizedNewtypeDeriving InstanceSigs KindSignatures LambdaCase MultiParamTypeClasses MultiWayIf OverloadedStrings PackageImports PolyKinds RankNTypes ScopedTypeVariables StandaloneDeriving TupleSections TypeFamilies TypeOperators TypeSynonymInstances ViewPatterns
+  default-extensions: BangPatterns BinaryLiterals ConstraintKinds DataKinds DefaultSignatures DeriveAnyClass DeriveDataTypeable DeriveFoldable DeriveFunctor DeriveGeneric DeriveTraversable DerivingStrategies EmptyDataDecls ExistentialQuantification FlexibleContexts FlexibleInstances FunctionalDependencies GADTs GeneralizedNewtypeDeriving InstanceSigs KindSignatures LambdaCase MultiParamTypeClasses MultiWayIf OverloadedStrings PatternSynonyms PackageImports PolyKinds RankNTypes ScopedTypeVariables StandaloneDeriving TupleSections TypeFamilies TypeOperators TypeSynonymInstances ViewPatterns
   ghc-options: -Wno-missing-home-modules -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wpartial-fields -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       QuickCheck
@@ -178,6 +181,7 @@ test-suite optix-lang-test
     , parser-combinators
     , prettyprinter
     , prettyprinter-ansi-terminal
+    , regex-tdfa
     , scientific
     , semigroupoids
     , text

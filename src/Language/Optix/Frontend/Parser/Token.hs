@@ -2,62 +2,84 @@
 module Language.Optix.Frontend.Parser.Token
     ( Token_ (..)
     , Token
+    , NumRadix (..)
+    , numRadix
     ) where
 
+import qualified Data.ByteString.Lazy        as Lazy (ByteString)
 import           Data.Scientific             (Scientific)
 import           Data.Text                   (Text)
 import           Language.Optix.Util.Located (Located)
+import           Numeric.Natural             (Natural)
 
 type Token = Located Token_
 
 data Token_
-    = TokEOF
+    = EOF
 
-    | TokLParen
-    | TokRParen
-    | TokComma
-    | TokArrow
-    | TokWild
-    | TokColon
-    | TokSemicolon
-    | TokEqual
-    | TokDArrow
-    | TokLBrace
-    | TokRBrace
-    | TokBar
-    | TokAmpersand
+    | HASH
+    | HASHLBRACKET
+    | LPAREN
+    | RPAREN
+    | COMMA
+    | ARROW
+    | DOT
+    | COLON
+    | SEMICOLON
+    | EQUALOP
+    | DARROW
+    | LBRACKET
+    | RBRACKET
+    | WILD
+    | LBRACE
+    | BAR
+    | RBRACE
+    | AMPERSAND
+    | ASTERISK
 
-    | TokAnd
-    | TokAs
-    | TokAndAlso
-    | TokDo
-    | TokDot
-    | TokElse
-    | TokEnd
-    | TokFalse
-    | TokFn
-    | TokFun
-    | TokIf
-    | TokIn
-    | TokInfix
-    | TokInfixl
-    | TokInfixr
-    | TokLet
-    | TokNonfix
-    | TokOp
-    | TokOrElse
-    | TokPrim
-    | TokThen
-    | TokTrue
-    | TokVal
+    | AND
+    | ANDALSO
+    | AS
+    | CASE
+    | DATATYPE
+    | DO
+    | ELSE
+    | END
+    | FN
+    | FUN
+    | IF
+    | IN
+    | INFIX
+    | INFIXL
+    | INFIXR
+    | LET
+    | LOCAL
+    | NONFIX
+    | OF
+    | OP
+    | ORELSE
+    | THEN
+    | TYPE
+    | VAL
+    | WHILE
+    | WITHTYPE
 
-    | TokId !Text
-    | TokTyVarId !Text
-    | TokSymId !Text
+    | ID !Text
+    | TYVARID !Text
+    | SYMID !Text
 
-    | TokInt !Integer
-    | TokReal !Scientific
-    | TokString !Text
-    | TokChar !Char
+    | INT !Integer !NumRadix !Lazy.ByteString
+    | WORD !Natural
+    | REAL !Scientific
+    | STRING !Text
+    | CHAR !Char
+    deriving (Show, Eq)
 
+data NumRadix = HEX | BIN | DEC
+    deriving (Show, Eq)
+
+numRadix :: Num a => NumRadix -> a
+numRadix BIN = 2
+numRadix DEC = 10
+numRadix HEX = 16
 

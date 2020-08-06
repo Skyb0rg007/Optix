@@ -1,13 +1,16 @@
 
+{-# LANGUAGE UndecidableInstances #-}
 {-# LANGUAGE TemplateHaskell #-}
 
 module Language.Optix.Util.Located
     ( MonadLocated (..)
     , LocatedT (..)
+    , runLocatedT
     , Located (..)
     , Span (..)
     , _span_left, _span_right
     , SourcePos (..)
+    , sourcePos0
     , bogusSourcePos
     , spanSubstring
     ) where
@@ -16,20 +19,22 @@ import           Control.Applicative               (Alternative)
 import           Control.DeepSeq                   (NFData)
 import           Control.Monad.Base                (MonadBase (..))
 import           Control.Monad.Reader
+import           Control.Monad.State
 import           Control.Monad.Trans.Control
 import qualified Control.Monad.Trans.Except        as Except
 import qualified Control.Monad.Trans.Identity      as Identity
-import           Control.Monad.Trans.LFresh        (LFreshT)
 import qualified Control.Monad.Trans.Maybe         as Maybe
 import qualified Control.Monad.Trans.Reader        as Reader
 import qualified Control.Monad.Trans.RWS.Lazy      as LazyRWS
 import qualified Control.Monad.Trans.RWS.Strict    as StrictRWS
+import qualified Control.Monad.Trans.RWS.CPS    as CPSRWS
 import qualified Control.Monad.Trans.State.Lazy    as LazyState
 import qualified Control.Monad.Trans.State.Strict  as StrictState
-import           Control.Monad.Trans.Warn          (WarnT)
+import           Control.Monad.Warn
 import qualified Control.Monad.Trans.Writer.Lazy   as LazyWriter
 import qualified Control.Monad.Trans.Writer.Strict as StrictWriter
-import           Data.Binary                       (Binary (..))
+import qualified Control.Monad.Trans.Writer.CPS as CPSWriter
+import           Data.Binary                       (Binary)
 import           Data.Bytes.Serial                 (Serial, Serial1)
 import           Data.Data                         (Data)
 import           Data.Deriving                     (deriveEq1, deriveOrd1,
@@ -45,7 +50,9 @@ import           Data.Word                         (Word32)
 import           GHC.Generics                      (Generic, Generic1)
 import           Text.Printf                       (printf)
 
-class Moand m => MonadLocated m where
+import           Language.Optix.Util.Pretty
+
+class Monad m => MonadLocated m where
     getCurrentSpan :: m Span
     withCurrentSpan :: Span -> m a -> m a
 
@@ -53,6 +60,9 @@ class Moand m => MonadLocated m where
     getCurrentSpan = lift getCurrentSpan
     default withCurrentSpan :: (MonadTransControl t, MonadLocated n, m ~ t n) => Span -> m a -> m a
     withCurrentSpan s m = liftWith (\run -> withCurrentSpan s (run m)) >>= restoreT . pure
+
+runLocatedT :: LocatedT m a -> Span -> m a
+runLocatedT = runReaderT . unLocatedT
 
 newtype LocatedT m a = LocatedT { unLocatedT :: ReaderT Span m a }
     deriving newtype
@@ -90,14 +100,18 @@ instance MonadLocated m              => MonadLocated (StrictState.StateT s m)
 instance (Monoid w', MonadLocated m) => MonadLocated (LazyWriter.WriterT w' m)
 instance (Monoid w', MonadLocated m) => MonadLocated (StrictWriter.WriterT w' m)
 
-instance MonadLocated m => MonadLocated (LFreshT m)
 instance MonadLocated m => MonadLocated (WarnT w e m)
+
+instance MonadState s m => MonadState s (LocatedT m) where
+    get = lift get
+    put = lift . put
+instance MonadWarn w e m => MonadWarn w e (LocatedT m)
 
 data Located a = At
     { _located_span :: !Span
     , _located_val  :: !a
     }
-    deriving stock (Eq, Ord, Generic, Generic1, Data, Typeable)
+    deriving stock (Eq, Ord, Generic, Generic1, Data, Typeable, Functor)
 
 instance Applicative Located where
     pure = At mempty
@@ -106,6 +120,9 @@ instance Applicative Located where
 instance Pretty a => Pretty (Located a) where
     type Style (Located a) = Style a
     prettyPrec d (At _ a) = prettyPrec d a
+
+instance Show a => Show (Located a) where
+    showsPrec d (At _ a) = showsPrec d a
 
 -- | A source-code location
 data SourcePos = SourcePos
@@ -118,6 +135,9 @@ data SourcePos = SourcePos
 
 bogusSourcePos :: SourcePos
 bogusSourcePos = SourcePos "<bogus>" (-1) (-1) (-1)
+
+sourcePos0 :: FilePath -> SourcePos
+sourcePos0 file = SourcePos file 0 1 1
 
 instance Pretty SourcePos where
     pretty (SourcePos file _ line col) = pretty file <+> pretty line <> "." <> pretty col
@@ -152,7 +172,7 @@ instance Monoid Span where
 
 spanSubstring :: Span -> Text -> Text
 spanSubstring (Span (SourcePos _ start _ _) (SourcePos _ end _ _)) str =
-    Text.drop (fromIntegral start) $ Text.take (fromIntegral end) str
+    Text.drop start $ Text.take end str
 
 deriveEq1 ''Located
 deriveOrd1 ''Located

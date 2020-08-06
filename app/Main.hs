@@ -4,6 +4,7 @@ module Main where
 
 import           Control.Monad.Except
 import           Control.Monad.Reader
+import           Control.Monad.Warn
 import           Control.Monad.State.Strict
 import qualified Data.ByteString.Lazy       as Lazy.ByteString
 import           Data.HashMap.Strict        (HashMap)
@@ -12,19 +13,26 @@ import           Data.List.NonEmpty         (NonEmpty ((:|)))
 import qualified Data.List.NonEmpty         as NonEmpty
 import           Data.Text                  (Text)
 import qualified Data.Text.IO               as Text.IO
-import           Data.Text.Prettyprint.Doc
-import           Data.Text.Prettyprint.Doc.Render.Terminal
+-- import           Data.Text.Prettyprint.Doc
+-- import           Data.Text.Prettyprint.Doc.Render.Terminal
 import qualified Foreign.LibFFI             as FFI
 -- import           System.DlOpen
 import           System.Environment
 import           System.Exit
 import           System.IO
+import           Data.Foldable
 
 -- import qualified Language.Optix.Core.SExp              as Core
 -- import qualified Language.Optix.Core.Syntax            as Core
 -- import qualified Language.Optix.Frontend.Lower         as Frontend
--- import qualified Language.Optix.Frontend.Parser.Lexer  as Frontend
--- import qualified Language.Optix.Frontend.Parser.Monad  as Frontend
+import qualified Language.Optix.Frontend.Parser.Lexer  as Frontend
+import qualified Language.Optix.Frontend.Parser.Parser as Frontend
+import qualified Language.Optix.Frontend.Parser.Monad  as Frontend
+import           Language.Optix.Frontend.Parser.Token
+import           Language.Optix.Frontend.Syntax
+import           Language.Optix.Typecheck.Scope (scope)
+import           Language.Optix.Util.Located
+import           Language.Optix.Util.Pretty
 -- import qualified Language.Optix.Frontend.Parser.Parser2 as Frontend
 -- import qualified Language.Optix.Frontend.Parser.Token  as Frontend
 -- import qualified Language.Optix.Frontend.AST        as Frontend
@@ -80,8 +88,32 @@ import           System.IO
     -- Core.StyleLabel -> colorDull Blue
     -- Core.StyleBool -> colorDull Red
 
+lexTokens :: Frontend.Parser [Token]
+lexTokens = do
+    tok <- Frontend.lexToken
+    case tok of
+      At _ EOF -> pure [tok]
+      _ -> (tok:) <$> lexTokens
+
 main :: IO ()
-main = putStrLn "main"
+main = do
+    input <- Lazy.ByteString.getContents
+    case Frontend.runParser Frontend.parseProgram BogusSpan (Frontend.AlexInput (sourcePos0 "<stdin>") input) of
+      (Left err, warns) -> do
+          putStrLn $ "Errors: " ++ show (pretty err)
+          putStrLn $ "Warnings: " ++ show (pretty (toList warns))
+      (Right prog, warns) -> do
+          putStrLn $ "Warnings: " ++ show (pretty (toList warns))
+          putStrLn "Prog: "
+          printLnTerminal prog
+          case runWarn (runLocatedT (traverse scope (_program_decs prog)) BogusSpan) of
+            (Left err, warns) -> do
+                putStrLn $ "Errors: " ++ show (pretty err)
+                putStrLn $ "Warnings: " ++ show (pretty (toList warns))
+            (Right decs, warns) -> do
+                putStrLn $ "Warnings: " ++ show (pretty (toList warns))
+                putStrLn "Prog': "
+                printLnTerminal (Program decs)
 
 {- 
 main :: IO ()
